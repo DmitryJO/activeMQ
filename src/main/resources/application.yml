@@ -1,0 +1,28 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: activeMQ
+  activemq:
+    broker-url: tcp://localhost:61616
+    user: admin
+    password: admin
+  datasource:
+    url: jdbc:postgresql://localhost:5434/dictionaries
+    username: postgres
+    password: postgres
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+app:
+  jms:
+    dictionary-queue: dictionaries.queue
+  external-api:
+    # Пусто = только запись в БД. Когда появится API, задайте EXTERNAL_API_URL.
+    url: ${EXTERNAL_API_URL:}

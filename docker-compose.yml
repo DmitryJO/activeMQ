@@ -1,0 +1,25 @@
+services:
+  activemq:
+    image: apache/activemq-classic:6.1.6
+    container_name: dictionaries-activemq
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+    environment:
+      ACTIVEMQ_CONNECTION_USER: admin
+      ACTIVEMQ_CONNECTION_PASSWORD: admin
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: dictionaries-postgres
+    environment:
+      POSTGRES_DB: dictionaries
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - dictionaries_data:/var/lib/postgresql/data
+
+volumes:
+  dictionaries_data:
