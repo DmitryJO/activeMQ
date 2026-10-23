@@ -1,7 +1,15 @@
 HELP.md
+
+### Maven ###
+target/
+.flattened-pom.xml
+pom.xml.versionsBackup
+pom.xml.releaseBackup
+release.properties
+
+### Leftover Gradle output ###
 .gradle
 build/
-!gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
@@ -35,3 +43,24 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Local configuration ###
+.env
+.env.*
+!.env.example
+!.env.sample
+/src/main/resources/application-local.properties
+/src/main/resources/application-local.yml
+/src/main/resources/application-local.yaml
+
+### Logs and JVM crash reports ###
+*.log
+/logs/
+hs_err_pid*
+replay_pid*
+*.hprof
+
+### OS files ###
+.DS_Store
+Thumbs.db
+Desktop.ini
