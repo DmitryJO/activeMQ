@@ -16,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestClient;
 
 import javax.sql.DataSource;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,6 +57,32 @@ class AmqOnlyFlowTest {
         await().atMost(Duration.ofSeconds(10)).untilAsserted(() ->
                 assertThat(output.getOut()).contains(
                         "Received ActiveMQ message (amq-only): AMQ_ONLY_RAW_TEXT"));
+    }
+
+    @Test
+    void decodesUtf8BytesMessageWithCyrillic(CapturedOutput output) {
+        String json = """
+                {"Type":"{MDM}Справочник.СтраныМира","Код":"792","Наименование":"ТУРЦИЯ"}
+                """.strip();
+        jmsTemplate.send("amq-only-test.queue", session -> {
+            var message = session.createBytesMessage();
+            message.writeBytes(json.getBytes(StandardCharsets.UTF_8));
+            return message;
+        });
+
+        await().atMost(Duration.ofSeconds(10)).untilAsserted(() ->
+                assertThat(output.getOut()).contains(
+                        "Received ActiveMQ message (amq-only): " + json));
+    }
+
+    @Test
+    void preservesTextEvenWhenItLooksLikeByteValues(CapturedOutput output) {
+        String text = "123,13,10,32,34,-48,-95";
+        jmsTemplate.convertAndSend("amq-only-test.queue", text);
+
+        await().atMost(Duration.ofSeconds(10)).untilAsserted(() ->
+                assertThat(output.getOut()).contains(
+                        "Received ActiveMQ message (amq-only): " + text));
     }
 
     @Test
