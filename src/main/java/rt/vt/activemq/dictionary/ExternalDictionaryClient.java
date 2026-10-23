@@ -1,6 +1,7 @@
 package rt.vt.activemq.dictionary;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -9,6 +10,7 @@ import rt.vt.activemq.config.AppProperties;
 
 @Slf4j
 @Component
+@Profile("!amq-only")
 public class ExternalDictionaryClient {
 
     private final AppProperties properties;
